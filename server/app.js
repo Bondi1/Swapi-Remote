@@ -1,6 +1,5 @@
 const { ApolloServer, gql } = require("apollo-server");
 const PeopleAPI = require("./datasources/allPeople");
-const _ = require("lodash");
 
 const typeDefs = gql`
   type Film {
