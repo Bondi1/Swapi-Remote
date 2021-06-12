@@ -63,11 +63,8 @@ const resolvers = {
           let personsfilms = person.filmConnection.edges.map( item => item.node);
           personsfilms.map(p => {
             let filmExists = filmArray.find(f => f.id === p.id);
-            if(!filmExists)  filmArray.push(p)})
-          
-          console.log(filmArray);
+            if(!filmExists)  filmArray.push(p)})  
         }); 
-        console.log(filmArray);
         return filmArray;
     },
   },
