@@ -7,9 +7,11 @@
         "start": "nodemon app.js"
     },
     "dependencies": {
+        "apollo-datasource": "^0.9.0",
         "apollo-server": "^2.12.0",
         "axios": "^0.19.2",
-        "graphql": "^15.0.0"
+        "graphql": "^15.0.0",
+        "lodash": "^4.17.21"
     },
     "devDependencies": {
         "nodemon": "^2.0.3"
