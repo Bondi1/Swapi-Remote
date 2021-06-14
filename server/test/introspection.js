@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const { describe, it } = require('mocha');
-const { buildSchema, graphqlSync, introspectionQuery } = require("graphql");
+const { buildSchema, graphqlSync } = require("graphql");
 const sdlString = require('../schema.graphql')
 const graphqlSchemaObj = buildSchema(sdlString);
 
