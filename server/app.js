@@ -1,51 +1,6 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, makeExecutableSchema } = require("apollo-server");
 const PeopleAPI = require("./datasources/allPeople");
-
-const typeDefs = gql`
-  type Film {
-    title: String
-    episodeID: Int
-    director: String
-    producers: [String]
-    created: String
-    id: ID!
-  }
-
-  type PeopleFilmsEdge {
-    node: Film
-    cursor: String!
-  }
-
-  type PeopleFilmsConnection {
-    edges: [PeopleFilmsEdge]
-    totalCount: Int
-  }
-
-  type Person {
-    id: ID!
-    name: String
-    birthYear: String
-    eyeColor: String
-    gender: String
-    hairColor: String
-    height: Int
-    mass: Int
-    skinColor: String
-    created: String
-    edited: String
-    filmConnection: PeopleFilmsConnection
-  }
-
-  type AllPeople {
-      people : [Person]
-  }
-
-  type Query {
-    allPeople: AllPeople
-    person(id: ID): Person
-    allFilms: [Film]
-  }
-`;
+const typeDefs = require('./schema.graphql')
 
 const resolvers = {
   Query: {
@@ -67,6 +22,13 @@ const resolvers = {
         }); 
         return filmArray;
     },
+    allReviews: (parent, args, { dataSources }, info) => {
+      reviews = dataSources.peopleAPI.getAllReviews();
+      return reviews;
+    },
+    getReview: (parent, { type }, { dataSources }, info) => {
+      return dataSources.peopleAPI.getReviewByType(type);
+    },
   },
   Person: {
     filmConnection: (parent) => {
@@ -77,12 +39,25 @@ const resolvers = {
     totalCount: (parent) => {
         return parent.edges.length;
     }
-  }
+  },
+  Mutation: {
+    review: async (_, { type }, { dataSources }) => {
+      const review = await dataSources.peopleAPI.findOrCreateReview({ type });
+      if (review) {
+        return review;
+      }
+    },
+  },
+
 };
 
-const server = new ApolloServer({
-  typeDefs,
+const schema = makeExecutableSchema({
+  typeDefs: typeDefs,
   resolvers,
+})
+
+const server = new ApolloServer({
+  schema: schema,
   dataSources: () => {
     return {
       peopleAPI: new PeopleAPI(),

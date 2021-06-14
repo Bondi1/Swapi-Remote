@@ -1,0 +1,67 @@
+const schema = `
+  type Film {
+    title: String
+    episodeID: Int
+    director: String
+    producers: [String]
+    created: String
+    id: ID!
+  }
+
+  type PeopleFilmsEdge {
+    node: Film
+    cursor: String!
+  }
+
+  type PeopleFilmsConnection {
+    edges: [PeopleFilmsEdge]
+    totalCount: Int
+  }
+
+  type Person {
+    id: ID!
+    name: String
+    birthYear: String
+    eyeColor: String
+    gender: String
+    hairColor: String
+    height: Int
+    mass: Int
+    skinColor: String
+    created: String
+    edited: String
+    filmConnection: PeopleFilmsConnection
+  }
+
+  type AllPeople {
+      people : [Person]
+  }
+
+  type Review {
+    id: ID
+    type: String
+  }
+  
+  type AllReviews {
+    reviews : [Review]
+  }
+
+  type Query {
+    allPeople: AllPeople
+    person(id: ID): Person
+    allFilms: [Film]
+    allReviews: AllReviews
+    getReview(type: String): Review
+  }
+
+  type Mutation {
+    review(type: String) : Review
+  }
+
+  input AddReview {
+    id: ID
+    type: String
+  }
+`;
+
+module.exports = schema

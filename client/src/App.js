@@ -1,7 +1,26 @@
 import React from 'react'
-import {gql} from 'graphql-tag'
-import {useQuery} from '@apollo/react-hooks'
+import { gql, useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/react-hooks'
 import './App.css'
+
+
+const ADD_REVIEW = gql`
+  mutation AddReview($type: String!) {
+    review(type: $type) {
+      id
+      type
+    }
+  }
+`;
+
+const REVIEW_QUERY = gql`
+  query($type: String!) {
+    getReview(type: $type) {
+      id
+      type
+    }
+  }
+`;
 
 const PERSON_QUERY = gql`
 query($id: ID) {
@@ -30,8 +49,8 @@ allPeople{
   }
 }
 }`
-const Person = ({person: {name, eyeColor, birthYear, gender}}) => (
-  <div className = 'Card'>
+const Person = ({ person: { name, eyeColor, birthYear, gender } }) => (
+  <div className='Card'>
     <div>
       <h1>My Name is : {name}</h1>
       <h2>I am having {eyeColor} EyeColor</h2>
@@ -45,43 +64,87 @@ function AllPeople() {
   const { loading, data, error } = useQuery(ALL_PEOPLE)
   if (error) return <h1>Something went wrong! {error.message}</h1>
   if (loading) return <h1>Loading...</h1>
-  console.log({data})
+  console.log({ data })
   return (
     <main className='App'>
-             <h1>Person Data</h1>
-             {data.allPeople.people.map((person) => (
-                 <Person key={person.id} person={person}/>
-             ))}
-         </main>
+      <h1>Person Data</h1>
+      {data.allPeople.people.map((person) => (
+        <Person key={person.id} person={person} />
+      ))}
+    </main>
   )
-  }
+}
 
-function App(){
+function AddReview() {
+  let input;
+  const [addReview, { data_mutation }] = useMutation(ADD_REVIEW);
+
+  return (
+    <div>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          addReview({ variables: { type: input.value } });
+          input.value = '';
+        }}
+      >
+        <input
+          ref={node => {
+            input = node;
+          }}
+        />
+        <button type="submit">Add Review</button>
+      </form>
+    </div>
+  );
+}
+
+function App() {
+  let input;
+  const [addReview, { data_mutation }] = useMutation(ADD_REVIEW);
+
   // Get all people data 
   const allPeopleData = AllPeople();
 
   // Get films for one user id
-  const id='cGVvcGxlOjE=';
-  const { loading, data, error } = useQuery(PERSON_QUERY, { variables: { id } })
+  const id = 'cGVvcGxlOjE=';
+  //const { loading, data, error } = useQuery(PERSON_QUERY, { variables: { id } })
+  const { loading, data, error } = useQuery(REVIEW_QUERY, { variables: { type: 'a1' } })
   if (error) return <h1>Something went wrong! {error.message}</h1>
   if (loading) return <h1>Loading...</h1>
-  console.log({data})
+  console.log({ data })
   return (
     <div>
-    <dl>
-      <dt>Name</dt>
-      <dd>{ data.person.name }</dd>
-      
-      <dt>Films</dt>
-      <dd>{ data.person.filmConnection.edges.map(({ node }) => node.title).join(", ") }</dd>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          addReview({ variables: { type: input.value } });
+          input.value = '';
+        }}
+      >
+        <input
+          ref={node => {
+            input = node;
+          }}
+        />
+        <button type="submit">Add Review</button>
+      </form>
+      {<dl>
+        <dt>Name</dt>
+        <dd>{data.getReview.type}</dd>
+        {/* <dt>Name</dt>
+        <dd>{data.person.name}</dd>
 
-      <dt>All People Data</dt>
-      <dd>{ allPeopleData }</dd>
-    </dl>
+        <dt>Films</dt>
+        <dd>{data.person.filmConnection.edges.map(({ node }) => node.title).join(", ")}</dd>
+
+        <dt>All People Data</dt>
+        <dd>{allPeopleData}</dd> */}
+      </dl> }
     </div>
   )
- 
+
 }
-  
+
 
 export default App
