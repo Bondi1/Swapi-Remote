@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ApolloClient, HttpLink } from '@apollo/client';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider, ApolloClient, HttpLink } from '@apollo/client';
 import { InMemoryCache } from '@apollo/client';
 
 import App from './App';
@@ -19,13 +18,13 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 const httpLink = new HttpLink({
+  //uri: 'http://localhost:50786',
   uri: 'http://localhost:4000',
 });
 const link = ApolloLink.from([errorLink, httpLink]);
 
 const client = new ApolloClient({ 
   cache: new InMemoryCache(),
-  //uri: 'http://localhost:50786',
   link : link,
   onError: (e) => { console.log(e) },
   });

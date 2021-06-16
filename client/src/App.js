@@ -1,8 +1,8 @@
-import React from 'react'
-import { gql, useMutation } from '@apollo/client';
-import { useQuery } from '@apollo/react-hooks'
-import './App.css'
-
+import React, {useState} from 'react'
+import { gql, useMutation, useQuery } from '@apollo/client';
+import SelectPerson from './select';
+import PersonFilms from './personFilms';
+import './App.css';
 
 const ADD_REVIEW = gql`
   mutation AddReview($type: String!) {
@@ -99,52 +99,60 @@ function AddReview() {
   );
 }
 
-function App() {
-  let input;
-  const [addReview, { data_mutation }] = useMutation(ADD_REVIEW);
+// function App() {
+//   let input;
+//   const [addReview, { data_mutation }] = useMutation(ADD_REVIEW);
 
-  // Get all people data 
-  const allPeopleData = AllPeople();
+//   // Get all people data 
+//   const allPeopleData = AllPeople();
 
-  // Get films for one user id
-  const id = 'cGVvcGxlOjE=';
-  //const { loading, data, error } = useQuery(PERSON_QUERY, { variables: { id } })
-  const { loading, data, error } = useQuery(REVIEW_QUERY, { variables: { type: 'a1' } })
-  if (error) return <h1>Something went wrong! {error.message}</h1>
-  if (loading) return <h1>Loading...</h1>
-  console.log({ data })
+//   // Get films for one user id
+//   const id = 'cGVvcGxlOjE=';
+//   //const { loading, data, error } = useQuery(PERSON_QUERY, { variables: { id } })
+//   const { loading, data, error } = useQuery(REVIEW_QUERY, { variables: { type: 'a1' } })
+//   if (error) return <h1>Something went wrong! {error.message}</h1>
+//   if (loading) return <h1>Loading...</h1>
+//   console.log({ data })
+//   return (
+//     <div>
+//       <form
+//         onSubmit={e => {
+//           e.preventDefault();
+//           addReview({ variables: { type: input.value } });
+//           input.value = '';
+//         }}
+//       >
+//         <input
+//           ref={node => {
+//             input = node;
+//           }}
+//         />
+//         <button type="submit">Add Review</button>
+//       </form>
+//       {<dl>
+//         <dt>Name</dt>
+//         <dd>{data.getReview.type}</dd>
+//         {/* <dt>Name</dt>
+//         <dd>{data.person.name}</dd>
+
+//         <dt>Films</dt>
+//         <dd>{data.person.filmConnection.edges.map(({ node }) => node.title).join(", ")}</dd>
+
+//         <dt>All People Data</dt>
+//         <dd>{allPeopleData}</dd> */}
+//       </dl> }
+// </div>)
+// }
+
+function App(){
+  const [personId, setPersonId] = useState(0);
+  
   return (
     <div>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          addReview({ variables: { type: input.value } });
-          input.value = '';
-        }}
-      >
-        <input
-          ref={node => {
-            input = node;
-          }}
-        />
-        <button type="submit">Add Review</button>
-      </form>
-      {<dl>
-        <dt>Name</dt>
-        <dd>{data.getReview.type}</dd>
-        {/* <dt>Name</dt>
-        <dd>{data.person.name}</dd>
-
-        <dt>Films</dt>
-        <dd>{data.person.filmConnection.edges.map(({ node }) => node.title).join(", ")}</dd>
-
-        <dt>All People Data</dt>
-        <dd>{allPeopleData}</dd> */}
-      </dl> }
+    <SelectPerson handleChange= {e => setPersonId(e.target.value)}/>
+    <PersonFilms personId={personId}/>
     </div>
   )
-
 }
-
 
 export default App
