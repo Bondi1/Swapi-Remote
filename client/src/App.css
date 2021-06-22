@@ -3,6 +3,20 @@
     margin: 2rem 0;
 }
 
+p,
+dt {
+    font-weight: bold;
+}
+
+dl,
+dd {
+    font-size: .9rem;
+}
+
+dd {
+    margin-bottom: 1em;
+}
+
 .Card {
     max-width: 600px;
     margin: auto;

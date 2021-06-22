@@ -18,8 +18,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 const httpLink = new HttpLink({
-  //uri: 'http://localhost:50786',
-  uri: 'http://localhost:4000',
+  //uri: 'http://localhost:55265',
+   uri: 'http://localhost:4000',
 });
 const link = ApolloLink.from([errorLink, httpLink]);
 

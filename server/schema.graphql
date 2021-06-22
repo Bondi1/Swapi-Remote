@@ -55,10 +55,10 @@ const schema = `
   }
 
   type Mutation {
-    review(type: String) : Review
+    createReview(type: String) : Review
   }
 
-  input AddReview {
+  input ReviewInput {
     id: ID
     type: String
   }

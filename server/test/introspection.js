@@ -4,16 +4,6 @@ const { buildSchema, graphqlSync } = require("graphql");
 const sdlString = require('../schema.graphql')
 const graphqlSchemaObj = buildSchema(sdlString);
 
-// Dummy Sample test to check mocha
-var assert = require('assert');
-describe('Array', function () {
-  describe('#indexOf()', function () {
-    it('should return -1 when the value is not present', function () {
-      assert.equal([1, 2, 3].indexOf(4), -1);
-    });
-  });
-});
-
 function queryPeople(introspectionQuery) {
   const result = graphqlSync(graphqlSchemaObj, introspectionQuery);
   expect(Object.keys(result)).to.deep.equal(['data']);
@@ -53,7 +43,7 @@ describe('All People Introspection Tests', () => {
             { "name": "AllReviews" },
             { "name": "Query" },
             { "name": "Mutation" },
-            { "name": "AddReview" },
+            { "name": "ReviewInput" },
             { "name": "Boolean" },
             { "name": "__Schema" },
             { "name": "__Type" },

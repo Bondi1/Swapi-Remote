@@ -29,21 +29,18 @@ class PeopleAPI extends DataSource {
         const review = _.filter(allReviews, {type: type})
         return review[0];
     }
-
-    findOrCreateReview(typeObj){
-        const allReviews = data.allReviews.reviews;
-        const review = _.filter(allReviews, typeObj)
-        if( review.length === 0 )
-        {
-            const id = allReviews.length + 1;
-            const newReview = {
-                id : id,
-                type : typeObj.type
-            };
-            allReviews.push( newReview );
-            return newReview;
-        }
-        return review[0];
+    
+    // TODO: Can improve this to be a findandcreate review
+    createReview(typeObj){
+        console.log(typeObj);
+        const allReviews = data.allReviews.reviews;        
+        const id = allReviews.length + 1;
+        const newReview = {
+            id : id,
+            type : typeObj.type
+        };
+        allReviews.push( newReview );
+        return newReview;
     }
 
 }
